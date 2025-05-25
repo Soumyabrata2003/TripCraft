@@ -7,6 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import math
 import numpy as np
 from scipy.stats import multivariate_normal, poisson
+import argparse
 
 
 # Load the cleaned attractions data
@@ -392,15 +393,19 @@ def calculate_temporal_score(travel_plan):
 
 
 if __name__ == '__main__':
-    # Path to your jsonl file
-    jsonl_file_path = 'path_to_output_jsonl.jsonl'
-    gen_jsonl_file_path = 'path_to_anno_jsonl.jsonl'
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--gen_file", type=str, default="./")
+    parser.add_argument("--anno_file", type=str, default="./")
+    args = parser.parse_args()
+    
+    gen_file_path = args.gen_file
+    anno_jsonl_file_path = args.anno_file
 
     metrics_list = []
     progress = 0
 
     # Open both files simultaneously
-    with open(jsonl_file_path, 'r', encoding='utf-8') as file1, open(gen_jsonl_file_path, 'r', encoding='utf-8') as file2:
+    with open(gen_file_path, 'r', encoding='utf-8') as file1, open(anno_jsonl_file_path, 'r', encoding='utf-8') as file2:
         for line1, line2 in zip(file1, file2):
             # Parse each line as a JSON object
             progress += 1
@@ -410,7 +415,7 @@ if __name__ == '__main__':
             if json_object1["plan"][0]["days"] == 0:
                 metrics_list.append({"temporal_score": -1, "spatial_score": -1, "ordering_score": -1, "persona_score": -1})
             else:
-                metrics_list.append({"temporal_score": calculate_temporal_score(json_object1), "spatial_score": calculate_spatial_score(json_object1, json_object2), "ordering_score": calculate_ordering_score(json_object1), "persona_score": calculate_persona_score(json_object1)})
+                metrics_list.append({"temporal_score": calculate_temporal_score(json_object1), "spatial_score": calculate_spatial_score(json_object1), "ordering_score": calculate_ordering_score(json_object1,json_object_2), "persona_score": calculate_persona_score(json_object1)})
             print(progress)  # Access the JSON object (a dictionary in Python)
 
     print(len(metrics_list))
