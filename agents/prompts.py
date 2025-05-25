@@ -110,12 +110,12 @@ Output: """
 
 
 
-planner_agent_prompt_mltp = PromptTemplate(
+planner_agent_prompt_direct_og = PromptTemplate(
                         input_variables=["text","query","persona"],
                         template = PLANNER_INSTRUCTION_OG,
                         )
 
-# planner_agent_prompt_mltp = PromptTemplate(
+# planner_agent_prompt_direct_param = PromptTemplate(
 #                         input_variables=["text","query","persona"],
 #                         template = PLANNER_INSTRUCTION_PARAMETER_INFO,
 #                         )
