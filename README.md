@@ -22,7 +22,7 @@ This is the official implementation of **TripCraft**, a new benchmark for LLM dr
 
 ## 📢 News
 
-- 2025/05/16: 🎉 Our **TripCraft** has been accepted to the Main Track of ACL 2025.
+- 2025/05/16: 🎉 Our **TripCraft** has been accepted to the Main Track of **ACL 2025**.
 
 # 🧭 TripCraft Overview
 
