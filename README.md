@@ -55,17 +55,17 @@ bash run.sh
 
 We leverage GPT-4o to convert natural language output plans into structured JSON representations, following TravelPlanner's postprocessing [scripts](https://github.com/OSU-NLP-Group/TravelPlanner?tab=readme-ov-file#postprocess). We also perform consistency checks to ensure that the corresponding elements of the natural language plan were mapped properly to their JSON fields, thereby minimizing the mismatch introduced by LLM-based postprocessing. We encourage researchers and developers to explore alternative LLMs or prompt engineering strategies to further enhance the robustness and accuracy of the plan-to-JSON conversion process.
 
-Prior to evaluation, the output at this stage is expected to match the format provided in [sample_evaluation_format](https://github.com/Soumyabrata2003/TripCraft/blob/main/postprocess/sample_evaluation_format.jsonl).
+It is essential to note that the output at this stage is expected to match the format provided in [sample_evaluation_format](https://github.com/Soumyabrata2003/TripCraft/blob/main/postprocess/sample_evaluation_format.jsonl), prior to evaluation..
 
 <a name="testing"></a>
 ## ⚡ Evaluation
 
-Qualitative Metrics (Continuous)
+### Qualitative Metrics (Continuous)
 ```sh
 cd evaluation
-python qualitative_metrics.py --gen_file <generated_output_json_file> --anno_file <annotation_json_file>
+python qualitative_metrics.py --gen_file <generated_output_jsonl_file> --anno_file <annotation_jsonl_file>
 ```
-Feasibility Metrics (Discrete)
+### Feasibility Metrics (Discrete)
 
 ```sh
 # set_type: 3d/5d/7d
