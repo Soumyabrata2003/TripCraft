@@ -12,7 +12,7 @@ import numpy as np
 
 google_distance = GoogleDistanceMatrix()
 
-city_set = open('/home/mtech/ATP_database/background/citySet_with_states_140.txt').read().strip().split('\n')
+city_set = open('/home/soumya/ATP_database/background/citySet_with_states_140.txt').read().strip().split('\n')
 
 state_city_map = {}
 
@@ -50,7 +50,7 @@ def select_consecutive_dates(num_days, start_date=datetime(2024, 11, 1), end_dat
 
 def get_org_dest(days:int):
     if days == 3:
-        city_set = open('/home/mtech/ATP_database/background/citySet_with_states_140.txt').read().strip().split('\n')
+        city_set = open('/home/soumya/ATP_database/background/citySet_with_states_140.txt').read().strip().split('\n')
 
         org = random.choice(city_set)
 
@@ -64,7 +64,7 @@ def get_org_dest(days:int):
 
     elif days in [5,7]:
     
-        state_set = open('/home/mtech/ATP_database/background/citySet_with_states_140.txt').read().strip().split('\n')
+        state_set = open('/home/soumya/ATP_database/background/citySet_with_states_140.txt').read().strip().split('\n')
         org = random.choice(state_set)
 
         while True:
@@ -231,74 +231,6 @@ def hard_level_element_selection(day_list):
     return query_dict
 
 
-def very_hard_level_element_selection(day_list):
-    days = random.choice(day_list)
-    date  = [date.strftime('%Y-%m-%d') for date in select_consecutive_dates(days)]
-    people_number = random.choice(random.choice([[2],[3,4,5,6,7,8]]))
-    # local_constraint_list = ["flight time", "house rule", "cuisine","room type", "transportation"]
-    local_constraint_list = ["house rule", "cuisine","room type","transportation","event","attraction"]
-    probabilities = [0.2, 0.1, 0.2, 0.1, 0.2, 0.2] 
-    final_org, final_des = get_org_dest(days)
-    # result = google_distance.run(final_org, final_des)
-
-    # if result != {} and 'day' not in result["duration"]:
-    #     local_constraint_list.append()
-
-    local_constrain_record = {key:None for key in local_constraint_list}
-
-    local_constraint_type_list = np.random.choice(local_constraint_list, size=5, replace=False, p=probabilities).tolist()
-
-    for local_constraint_type in local_constraint_type_list:
-        # if local_constraint_type == "flight time":
-        #     local_constraint = random.choice(["morning", "afternoon", "evening"])
-        #     local_constrain_record["flight time"] = local_constraint
-
-        if local_constraint_type == "transportation":
-            local_constraint = random.choice(["no flight", "no self-driving"])
-            local_constrain_record["transportation"] = local_constraint
-
-        elif local_constraint_type == "room type":
-            if people_number <= 2:
-                local_constraint = random.choice(["shared room", "not shared room", "private room", "entire room"])
-            else:
-                local_constraint = random.choice(["private room", "entire room"])
-            local_constrain_record["room type"] = local_constraint
-
-        elif local_constraint_type == "house rule":
-            local_constraint = random.choice(["parties","smoking","children under 10","visitors","pets"])
-            local_constrain_record["house rule"] = local_constraint
-
-        elif local_constraint_type == "cuisine":
-            # choice_number = random.choice([2,3,4,5])
-            local_constraint = random.sample(["Chinese", "American", "Italian", "Mexican", "Indian","Mediterranean","French"], 4)
-            local_constrain_record["cuisine"] = local_constraint
-
-        elif local_constraint_type == "event":
-            # choice_number = random.choice([2,3,4,5])
-            local_constraint = random.sample(["Sports","Arts & Theatre","Music","Film"],2)
-            local_constrain_record["event"] = local_constraint
-
-        elif local_constraint_type == "attraction":
-            # choice_number = random.choice([2,3,4,5])
-            local_constraint = random.sample(['Boat Tours & Water Sports', 'Casinos & Gambling', 'Classes & Workshops', 'Concerts & Shows',
-                                            'Food & Drink', 'Fun & Games', 'Museums', 'Nature & Parks', 'Nightlife',
-                                            'Outdoor Activities', 'Shopping', 'Sights & Landmarks', 'Spas & Wellness', 
-                                            'Water & Amusement Parks', 'Zoos & Aquariums'],2)
-            local_constrain_record["attraction"] = local_constraint
-    
-    budget = budget_calc(final_org, final_des, days=days, date=date, people_number=people_number,local_constraint=local_constrain_record)
-
-    if days == 3:
-        final_budget = round_to_hundreds((budget["average"]+budget["lowest"])/2 * people_number * 0.5)
-    elif days == 5:
-        final_budget = round_to_hundreds(budget["average"] * people_number * 0.5)
-    elif days == 7:
-        final_budget = round_to_hundreds(round_to_hundreds((budget["average"]+budget["highest"])/2) * people_number * 0.5)
-
-    query_dict = {"org": final_org, "dest": final_des, "days": days, "visiting_city_number":visiting_city_map[days], "date":date, "people_number": people_number, "local_constraint": local_constrain_record ,"budget": final_budget, "query": None,"level":"very hard"}
-
-    return query_dict
-
 def generate_elements(number:int, level="easy", day_list=[3,5,7]):
     """Generate the elements for the easy level query."""
     query_list = []
@@ -334,7 +266,7 @@ if __name__ == "__main__":
     for num, day_list in zip([200,200,200], [[3],[5],[7]]):
         query_list = generate_elements(num,"easy",day_list=day_list)
 
-        with open('/home/mtech/MLTP/final_annotation_easy.jsonl', 'a+') as f:
+        with open('/home/soumya/MLTP/final_annotation_easy.jsonl', 'a+') as f:
             for query in query_list:
                 # print(query)
                 json.dump(query, f)
