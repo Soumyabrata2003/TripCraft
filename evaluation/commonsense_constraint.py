@@ -318,20 +318,22 @@ def is_valid_poi_sequence(question, tested_data):
                         first_poi_time = time_phrase.split('from ')[1].split(' to ')[0].strip()
                         if not is_time_difference_valid(arrival_time, first_poi_time, 30):
                             return False, f"First PoI on day {i+1} starts too soon after the flight arrival."
-                        
-            if i == 2 and poi_list[0] not in ['-', '']:
-                for time_phrase in poi_list[0].split(','):
-                    if 'stay from' in time_phrase or 'visit from' in time_phrase:
-                        first_poi_time = time_phrase.split('from ')[1].split(' to ')[0].strip()
-                        if not is_time_difference_valid(arrival_time, first_poi_time, 30):
-                            return False, f"First PoI on day {i+1} starts too soon after the flight arrival."
-            
-            if i == 4 and poi_list[0] not in ['-', '']:
-                for time_phrase in poi_list[0].split(','):
-                    if 'stay from' in time_phrase or 'visit from' in time_phrase:
-                        first_poi_time = time_phrase.split('from ')[1].split(' to ')[0].strip()
-                        if not is_time_difference_valid(arrival_time, first_poi_time, 30):
-                            return False, f"First PoI on day {i+1} starts too soon after the flight arrival."
+                            
+            if question['days'] > 3:            
+                if i == 2 and poi_list[0] not in ['-', '']:
+                    for time_phrase in poi_list[0].split(','):
+                        if 'stay from' in time_phrase or 'visit from' in time_phrase:
+                            first_poi_time = time_phrase.split('from ')[1].split(' to ')[0].strip()
+                            if not is_time_difference_valid(arrival_time, first_poi_time, 30):
+                                return False, f"First PoI on day {i+1} starts too soon after the flight arrival."
+
+            if question['days'] > 5:
+                if i == 4 and poi_list[0] not in ['-', '']:
+                    for time_phrase in poi_list[0].split(','):
+                        if 'stay from' in time_phrase or 'visit from' in time_phrase:
+                            first_poi_time = time_phrase.split('from ')[1].split(' to ')[0].strip()
+                            if not is_time_difference_valid(arrival_time, first_poi_time, 30):
+                                return False, f"First PoI on day {i+1} starts too soon after the flight arrival."
 
             if i == len(tested_data) - 1 and poi_list[-1] not in ['-', '']:
                 for time_phrase in poi_list[-1].split(','):
