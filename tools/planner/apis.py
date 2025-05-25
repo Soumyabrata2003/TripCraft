@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.getcwd(), "..")))
 from langchain.prompts import PromptTemplate
-from agents.prompts import planner_agent_prompt_mltp, planner_agent_prompt, cot_planner_agent_prompt, react_planner_agent_prompt,reflect_prompt,react_reflect_planner_agent_prompt, REFLECTION_HEADER
+from agents.prompts import planner_agent_prompt_direct_og, planner_agent_prompt_direct_param
 # from langchain.chat_models import ChatOpenAI
 from langchain_community.chat_models import ChatOpenAI
 from langchain.llms.base import BaseLLM
@@ -20,6 +20,8 @@ import time
 from enum import Enum
 from typing import List, Union, Literal
 # from langchain_google_genai import ChatGoogleGenerativeAI
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
 import argparse
 
 
@@ -52,88 +54,67 @@ class ReflexionStrategy(Enum):
 
 class Planner:
     def __init__(self,
-                 # args,
-                 agent_prompt: PromptTemplate = planner_agent_prompt,
+                 agent_prompt: PromptTemplate = planner_agent_prompt_direct_og,
                  model_name: str = 'gpt-3.5-turbo-1106',
                  ) -> None:
-
         self.agent_prompt = agent_prompt
         self.scratchpad: str = ''
         self.model_name = model_name
         self.enc = tiktoken.encoding_for_model("gpt-3.5-turbo")
-
-        if model_name in  ['mistral-7B-32K']:
-            self.llm = ChatOpenAI(temperature=0,
-                     max_tokens=4096,
-                     openai_api_key="EMPTY", 
-                     openai_api_base="http://localhost:8301/v1", 
-                     model_name="gpt-3.5-turbo")
         
-        elif model_name in  ['ChatGLM3-6B-32K']:
-            self.llm = ChatOpenAI(temperature=0,
-                     max_tokens=4096,
-                     openai_api_key="EMPTY", 
-                     openai_api_base="http://localhost:8501/v1", 
-                     model_name="gpt-3.5-turbo")
+        if model_name in ['qwen','phi4]:
+            model_path = {
+                'qwen': "Qwen/Qwen2.5-7B-Instruct",
+                'phi4': "microsoft/Phi-4-mini-instruct"
+            }[model_name]
             
-        elif model_name in ['mixtral']:
-            self.max_token_length = 30000
-            self.llm = ChatOpenAI(temperature=0,
-                     max_tokens=4096,
-                     openai_api_key="EMPTY", 
-                     openai_api_base="http://localhost:8501/v1", 
-                     model_name="YOUR/MODEL/PATH")
-            
-        elif model_name in ['gemini']:
-            self.llm = ChatGoogleGenerativeAI(temperature=0,model="gemini-pro",google_api_key=GOOGLE_API_KEY)
-        elif model_name == 'o1-preview':
-            # Adjust for models requiring completions endpoint
-            # self.llm = OpenAI(
-            #     model=model_name,
-            #     temperature=0,
-            #     max_tokens=4096,
-            #     api_key=OPENAI_API_KEY
-            # )
-            self.llm = ChatOpenAI(model_name=model_name, temperature=1, max_completion_tokens=4096, openai_api_key=OPENAI_API_KEY)
+            self.tokenizer = AutoTokenizer.from_pretrained(model_path)
+            self.model = AutoModelForCausalLM.from_pretrained(
+                model_path,
+                torch_dtype=torch.float16,
+                device_map="auto",
+                offload_folder="offload",  # Enables CPU offloading
+                attn_implementation="flash_attention_2"  # Speeds up inference
+            )
         else:
             self.llm = ChatOpenAI(model_name=model_name, temperature=0, max_tokens=4096, openai_api_key=OPENAI_API_KEY)
-
-
+        
         print(f"PlannerAgent {model_name} loaded.")
 
     def run(self, text, query, persona, log_file=None) -> str:
         if log_file:
-            log_file.write('\n---------------Planner\n'+self._build_agent_prompt(text, query, persona))
-        # print(self._build_agent_prompt(text, query))
-        if self.model_name in ['gemini']:
-            return str(self.llm.invoke(self._build_agent_prompt(text, query, persona)).content)
+            log_file.write('\n---------------Planner\n' + self._build_agent_prompt(text, query, persona))
+        
+        prompt = self._build_agent_prompt(text, query, persona)
+        
+        if self.model_name in ['qwen','phi4']:
+            inputs = self.tokenizer(prompt, return_tensors="pt").to("cuda")
+            # print(self.model.generation_config)
+            output = self.model.generate(**inputs, max_new_tokens=3072) #do_sample=False) # temperature=0.0) #equivalent
+            generated_text = self.tokenizer.decode(output[0], skip_special_tokens=True)
+            
+            response_start = generated_text.find(prompt)
+            if response_start != -1:
+                generated_text = generated_text[response_start + len(prompt):].strip()
+            
+            return generated_text
         else:
-            if len(self.enc.encode(self._build_agent_prompt(text, query, persona))) > 12000:
+            if len(self.enc.encode(prompt)) > 12000:
                 return 'Max Token Length Exceeded.'
-            elif self.model_name == 'gpt-4o':
-                prompt = self._build_agent_prompt(text, query, persona)
-    
-                # Use the chat completion endpoint
+            elif self.model_name == 'gpt4o':
                 response = openai.ChatCompletion.create(
-                    model=self.model_name,  # Ensure this is the correct model
-                    messages=[
-                        {"role": "user", "content": prompt},  # The user's input message
-                    ],
+                    model=self.model_name,
+                    messages=[{"role": "user", "content": prompt}],
                     temperature=0,
                     max_tokens=4096,
                     api_key=OPENAI_API_KEY
                 )
-
-                # Access the response content
                 return response['choices'][0]['message']['content']
             else:
-                return self.llm([HumanMessage(content=self._build_agent_prompt(text, query, persona))]).content
+                return self.llm([HumanMessage(content=prompt)]).content
 
     def _build_agent_prompt(self, text, query, persona) -> str:
-        return self.agent_prompt.format(
-            text=text,
-            query=query,
-            persona = persona)
+        return self.agent_prompt.format(text=text, query=query, persona=persona)
 
 
 class ReactPlanner:
