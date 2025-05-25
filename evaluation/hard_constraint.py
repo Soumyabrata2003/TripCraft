@@ -255,34 +255,71 @@ def is_valid_attraction_type(question, tested_data):
                     return False, f"The attraction type {attraction_type} is not satisfied."
     else:
         return None, None
+    
+# def is_valid_event_type(question, tested_data):
+#     event_set = set()
+    
+#     if question['local_constraint']['event']:
+#         event_types = question['local_constraint']['event']
+#         if isinstance(event_types, str):
+#             event_types = [event_types]
+        
+#         for i in range(min(question['days'], len(tested_data))):
+#             unit = tested_data[i]
+            
+#             if unit['event'] and unit['event'] != '-':
+#                 event_list = unit['event'].split(';')
+#                 for event in event_list:
+#                     name = event.split(',')[0].strip()  # Extract name before the first comma
+#                     city = question['dest']  # Use destination city from the question
+                    
+#                     res = events.data[(events.data['name'].astype(str).str.contains(re.escape(name))) & (events.data['city'] == city)]
+                    
+#                     if len(res) > 0:
+#                         for event_type in event_types:
+#                             if event_type == res.iloc[0]['segmentName']:
+#                                 event_set.add(event_type)
+                                
+#         if len(event_set) == len(event_types):
+#             return True, None
+#         else:
+#             for event_type in event_types:
+#                 if event_type not in event_set:
+#                     return False, f"The event type {event_type} is not satisfied."
+#     else:
+#         return None, None
 
 def is_valid_event_type(question, tested_data):
     event_set = set()
-    
+   
     if question['local_constraint']['event']:
         event_types = question['local_constraint']['event']
         if isinstance(event_types, str):
             event_types = [event_types]
-        
-        city = question['dest'] 
-        dates = question['date']  
-        event_data = events.run(city, dates)  
-            
+       
+        # city = question['dest']  # Use destination city from the question
+        # city = event_types[0].rsplit(",",1)[-1].strip()
+        # dates = question['date']  # List of dates to filter events
+        # event_data = events.run(city, dates)  # Filter events based on city and date
+           
         for i in range(min(question['days'], len(tested_data))):
             unit = tested_data[i]
-                
+ 
             if unit['event'] and unit['event'] != '-':
                 event_list = unit['event'].split(';')
                 for event in event_list:
-                    name = event.split(',')[0].strip()  
-                        
+                    name = event.rsplit(',',1)[0].strip()  # Extract name before the first comma
+                    city = event.rsplit(",",1)[-1].strip()
+                    dates = question['date']
+                    event_data = events.run(city,dates)
+                       
                     res = event_data[(event_data['name'].astype(str).str.contains(re.escape(name)))]
-                        
+                       
                     if len(res) > 0:
                         for event_type in event_types:
                             if event_type == res.iloc[0]['segmentName']:
                                 event_set.add(event_type)
-                                    
+                                   
         if len(event_set) == len(event_types):
             return True, None
         else:
@@ -291,7 +328,6 @@ def is_valid_event_type(question, tested_data):
                     return False, f"The event type {event_type} is not satisfied."
     else:
         return None, None
-
 
 def is_valid_transportation(question, tested_data):
     if question['local_constraint']['transportation'] is None:
@@ -317,16 +353,16 @@ def is_valid_room_type(question, tested_data):
             name, city = get_valid_name_city(unit['accommodation'])
             res = accommodation.data[(accommodation.data['name'].astype(str).str.contains(re.escape(name))) & (accommodation.data['City'] == city)]
             if len(res) > 0:
-                if question['local_constraint']['room type'] == 'not shared room' and res['roomType'].values[0] == 'shared room':
+                if question['local_constraint']['room type'] == 'not shared room' and res['roomType'].values[0] == 'shared_room':
                     return False, f"The room type should be {question['local_constraint']['room type']}."
                 # "shared room", "not shared room", "private room", "entire room"
-                elif question['local_constraint']['room type'] == 'shared room' and res['roomType'].values[0] != 'shared room':
+                elif question['local_constraint']['room type'] == 'shared room' and res['roomType'].values[0] != 'shared_room':
                     return False, f"The room type should be {question['local_constraint']['room type']}."
 
-                elif question['local_constraint']['room type'] == 'private room' and res['roomType'].values[0] != 'private room':
+                elif question['local_constraint']['room type'] == 'private room' and res['roomType'].values[0] != 'private_room':
                     return False, f"The room type should be {question['local_constraint']['room type']}."
 
-                elif question['local_constraint']['room type'] == 'entire room' and res['roomType'].values[0] != 'entire room':
+                elif question['local_constraint']['room type'] == 'entire room' and res['roomType'].values[0] != 'entire_room':
                     return False, f"The room type should be {question['local_constraint']['room type']}."
 
     return True, None
@@ -342,4 +378,17 @@ def evaluation(query_data, tested_data):
     return_info['valid_event_type'] = is_valid_event_type(query_data, tested_data)
     return_info['valid_cost'] = (bool(get_total_cost(query_data, tested_data) <= query_data['budget']), None)
     return return_info
+
+def boolean_evaluation(query_data, tested_data):
+    return_info = {}
+    return_info['valid_cuisine'] = is_valid_cuisine(query_data, tested_data)
+    return_info['valid_room_rule'] = is_valid_room_rule(query_data, tested_data)
+    return_info['valid_transportation'] = is_valid_transportation(query_data, tested_data)
+    return_info['valid_room_type'] = is_valid_room_type(query_data, tested_data)
+    # return_info['valid_cost'] = (bool(get_total_cost(query_data, tested_data) <= query_data['budget']), None)
+    for key in return_info:
+        if return_info[key][0] == False:
+            print(key)
+            return False
+    return True
 
