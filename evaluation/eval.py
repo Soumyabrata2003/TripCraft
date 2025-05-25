@@ -197,25 +197,25 @@ def eval_score(set_type: str, file_path: str):
 
     if set_type == '3d':
         result['Delivery Rate'] = delivery_cnt / 230
-        result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 2070
+        result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 2300
         result['Commonsense Constraint Macro Pass Rate'] = final_commonsense_cnt / 230
-        result['Hard Constraint Micro Pass Rate'] = constraint_dis_record['hard']['pass'] / 291 #521 
+        result['Hard Constraint Micro Pass Rate'] = constraint_dis_record['hard']['pass'] / 521  
         result['Hard Constraint Macro Pass Rate'] = final_hardConstraint_cnt / 230
         result['Final Pass Rate'] = final_all_cnt / 230
 
     elif set_type == '5d':
         result['Delivery Rate'] = delivery_cnt / 230
-        result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 2070
+        result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 2300
         result['Commonsense Constraint Macro Pass Rate'] = final_commonsense_cnt / 230
-        result['Hard Constraint Micro Pass Rate'] = constraint_dis_record['hard']['pass'] / 316 #521 
+        result['Hard Constraint Micro Pass Rate'] = constraint_dis_record['hard']['pass'] / 546 
         result['Hard Constraint Macro Pass Rate'] = final_hardConstraint_cnt / 230
         result['Final Pass Rate'] = final_all_cnt / 230
 
     elif set_type == '7d':
         result['Delivery Rate'] = delivery_cnt / 227
-        result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 2043
+        result['Commonsense Constraint Micro Pass Rate'] = constraint_dis_record['commonsense']['pass'] / 2270
         result['Commonsense Constraint Macro Pass Rate'] = final_commonsense_cnt / 227
-        result['Hard Constraint Micro Pass Rate'] = constraint_dis_record['hard']['pass'] / 257 #521 
+        result['Hard Constraint Micro Pass Rate'] = constraint_dis_record['hard']['pass'] / 484
         result['Hard Constraint Macro Pass Rate'] = final_hardConstraint_cnt / 227
         result['Final Pass Rate'] = final_all_cnt / 227
 
