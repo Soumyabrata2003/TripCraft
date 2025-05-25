@@ -60,12 +60,12 @@ It is essential to note that the output at this stage is expected to match the f
 <a name="testing"></a>
 ## ⚡ Evaluation
 
-### Qualitative Metrics (Continuous)
+### ♾️ Qualitative Metrics (Continuous)
 ```sh
 cd evaluation
 python qualitative_metrics.py --gen_file <generated_output_jsonl_file> --anno_file <annotation_jsonl_file>
 ```
-### Feasibility Metrics (Discrete)
+### 📊 Feasibility Metrics (Discrete)
 
 ```sh
 # set_type: 3d/5d/7d
