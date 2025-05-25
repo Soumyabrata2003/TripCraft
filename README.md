@@ -53,28 +53,8 @@ bash run.sh
 
 ## 🛠️ Postprocess
 
-In order to parse natural language plans, we use gpt-4 to convert these plans into json formats. We encourage developers to try different parsing prompts to obtain better-formatted plans.
+We leverage GPT-4o to convert natural language output plans into structured JSON representations, following TravelPlanner's postprocessing [scripts](https://github.com/OSU-NLP-Group/TravelPlanner?tab=readme-ov-file#postprocess). We also perform consistency checks to ensure that the corresponding elements of the natural language plan were mapped properly to their JSON fields, thereby minimizing the mismatch introduced by LLM-based postprocessing. We encourage researchers and developers to explore alternative LLMs or prompt engineering strategies to further enhance the robustness and accuracy of the plan-to-JSON conversion process.
 
-```bash
-export OUTPUT_DIR=path/to/your/output/file
-export MODEL_NAME=MODEL_NAME
-export OPENAI_API_KEY=YOUR_OPENAI_KEY
-export SET_TYPE=validation
-export STRATEGY=direct
-# MODE in ['two-stage','sole-planning']
-export MODE=two-stage
-export TMP_DIR=path/to/tmp/parsed/plan/file
-export SUBMISSION_DIR=path/to/your/evaluation/file
-
-cd postprocess
-python parsing.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --mode $MODE --tmp_dir $TMP_DIR
-
-# Then these parsed plans should be stored as the real json formats.
-python element_extraction.py  --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --mode $MODE --tmp_dir $TMP_DIR
-
-# Finally, combine these plan files for evaluation. We also provide a evaluation example file "example_evaluation.jsonl" in the postprocess folder.
-python combination.py --set_type $SET_TYPE --output_dir $OUTPUT_DIR --model_name $MODEL_NAME --strategy $STRATEGY --mode $MODE  --submission_file_dir $SUBMISSION_DIR
-```
 
 <a name="testing"></a>
 ## ⚡ Evaluation
