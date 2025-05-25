@@ -101,7 +101,7 @@ class Planner:
         else:
             if len(self.enc.encode(prompt)) > 12000:
                 return 'Max Token Length Exceeded.'
-            elif self.model_name == 'gpt4o':
+            elif self.model_name == 'gpt-4o':
                 response = openai.ChatCompletion.create(
                     model=self.model_name,
                     messages=[{"role": "user", "content": prompt}],
