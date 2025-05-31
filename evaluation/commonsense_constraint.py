@@ -265,9 +265,14 @@ def is_valid_poi_sequence(question, tested_data):
         poi_list = unit["point_of_interest_list"].split(";")
 
         # Day-specific logic for transitions (e.g., day 3 or day 5)
-        if i+1 in [3,5] and prev_accommodation:
-            if not (prev_accommodation.strip() in poi_list[0] and current_accommodation.strip() in poi_list[-1]):
-                return False, f"Day {i+1} PoI list must start with previous day's accommodation and end with current day's accommodation."
+        if question['days']==7:
+            if i+1 in [3,5] and prev_accommodation:
+                if not (prev_accommodation.strip() in poi_list[0] and current_accommodation.strip() in poi_list[-1]):
+                    return False, f"Day {i+1} PoI list must start with previous day's accommodation and end with current day's accommodation."
+        elif question['days']==5:
+            if i+1 in [3] and prev_accommodation:
+                if not (prev_accommodation.strip() in poi_list[0] and current_accommodation.strip() in poi_list[-1]):
+                    return False, f"Day {i+1} PoI list must start with previous day's accommodation and end with current day's accommodation."
 
         # Normal check: start and end with current accommodation if specified
         elif unit["accommodation"] != "-":
