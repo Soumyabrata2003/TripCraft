@@ -40,7 +40,7 @@ conda env create -f tpct_env.yml -n tripcraft
 conda activate
 ```
 
-2. Download the [database](link_yet_to_be_updated) and unzip it to the `TripCraft` directory (i.e., `your/path/TripCraft`).
+2. Download the [database](https://drive.google.com/file/d/1a5dmmYhIhXHqFtd9jLZUyo7BS7FFVyRh/view?usp=sharing) and unzip it to the `TripCraft` directory (i.e., `your/path/to/TripCraft`).
 
 ## 🚀 Running
 TripCraft offers experimentation in two settings: w/o parameter information and with parameter information mode. Change the run.sh file accordingly for both the settings.
