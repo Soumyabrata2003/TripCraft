@@ -124,16 +124,25 @@ def judge_valid_cuisine(info, annotation_data, restaurant_data_all, cuisine_set:
 
 
 
-def get_valid_name_city(info):
-    # Modified the pattern to preserve spaces at the end of the name
-    pattern = r'(.*?),\s*([^,]+)(\(\w[\w\s]*\))?$'
-    match = re.search(pattern, info)
-    if match:
-        return match.group(1).strip(), extract_before_parenthesis(match.group(2).strip()).strip()
-    else:
-        print(f"{info} can not be parsed, '-' will be used instead.")
-        return "-","-"
+# def get_valid_name_city(info):
+#     # Modified the pattern to preserve spaces at the end of the name
+#     pattern = r'(.*?),\s*([^,]+)(\(\w[\w\s]*\))?$'
+#     match = re.search(pattern, info)
+#     if match:
+#         return match.group(1).strip(), extract_before_parenthesis(match.group(2).strip()).strip()
+#     else:
+#         print(f"{info} can not be parsed, '-' will be used instead.")
+#         return "-","-"
 
+def get_valid_name_city(info):
+    parts = info.rsplit(',', 1)
+    if len(parts) == 2:
+        name = parts[0].strip()
+        city = extract_before_parenthesis(parts[1].strip())
+        return name, city.strip()
+    else:
+        print(f"{info} cannot be parsed, '-' will be used instead.")
+        return "-", "-"
     
 def extract_numbers_from_filenames(directory):
     # Define the pattern to match files
