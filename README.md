@@ -17,7 +17,7 @@ This is the official implementation of **TripCraft**, a new benchmark for LLM dr
 
 <p align="center">
 [<a href="https://arxiv.org/abs/2502.20508">Paper</a>] •
-[<a>Dataset_to_be_updated</a>] 
+[<a href="https://drive.google.com/file/d/19-MbrzhaXe18zxHZAugvY2hWQAit3-qS/view?usp=drive_link">TripCraft</a>] 
 </p>
 
 ## 📢 News
@@ -76,7 +76,7 @@ python eval.py --set_type <SET_TYPE> --evaluation_file_path <EVALUATION_FILE_PAT
 <a name="bibtex"></a>
 ## 📌 BibTeX & Citation
 
-If you use our code in your research or wish to refer to the baseline results, please use the following BibTeX entry😁.
+If you use our code in your research or wish to refer to our research paper, please use the following BibTeX entry😁.
 
 
 ```bibtex
