@@ -588,11 +588,7 @@ def is_valid_information_in_sandbox(question, tested_data):
             attractions_list = unit['attraction'].split(';')
             for attraction in attractions_list:
                 name, city = get_valid_name_city(attraction)
-                # name = attraction
-                if 'from' in unit['current_city']:
-                    city = unit['current_city'].split("to")[1].strip()
-                else:
-                    city = unit['current_city'].strip()
+                
                 if len(attractions.data[(attractions.data['name'].astype(str).str.contains(re.escape(name))) & (attractions.data['City'] == city)]) < 1:
                     return False, f"The attraction {attraction} in day {i+1} is invalid in the sandbox."
         
@@ -601,7 +597,7 @@ def is_valid_information_in_sandbox(question, tested_data):
             events_list = unit['event'].split(';')
             for event in events_list:
                 # name, city = get_valid_name_city(event)
-                name = event.split(',')[0].strip()
+                name = event.rsplit(',',1)[0].strip()
                 # city = question['dest'] 
                 city = event.rsplit(",",1)[-1].strip()
                 if len(events.data[(events.data['name'].astype(str).str.contains(re.escape(name))) & (events.data['city'] == city)]) < 1:
@@ -621,6 +617,7 @@ def is_valid_information_in_sandbox(question, tested_data):
             for poi in poi_info:
                 if "nearest transit:" in poi:
                     transit_info = poi.split("nearest transit:")[1].strip()
+                    poi_name = poi.split("nearest transit:")[0].strip()[:-1].rsplit(",",1)[0].strip()
                     transit_stop = transit_info.rsplit(",", 1)[0].strip()
                     if "," in transit_info:
                         # print(transit_info)
@@ -632,45 +629,42 @@ def is_valid_information_in_sandbox(question, tested_data):
                     else:
                         return False, f"PoI list is not formatted correctly."
 
-                    # pois['nearest_stop_distance'] = pd.to_numeric(pois['nearest_stop_distance'], errors='coerce')
-                    # print(pois['nearest_stop_distance'].dtype)
                     try:
                         if question['days']==3:
                             if ((i+1)==3):
-                                city = unit['current_city'].split("from")[-1].split(" to ")[0].strip()
-                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                city = unit['current_city'].split("from ")[-1].split(" to ")[0].strip()
+                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
                                         return False, f"The PoI nearest stops in day {i+1} have hallucinated data."
                             else:
-                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
                                         return False, f"The PoI nearest stops in day {i+1} have hallucinated data."
                         if question['days']==5:
                             if ((i+1)==3):
-                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == org_city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
-                                    if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == dest_city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == org_city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                    if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == dest_city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
                                         return False, f"The PoI nearest stops in day {i+1} have hallucinated data."
                             elif ((i+1)==5):
-                                city = unit['current_city'].split("from")[-1].split(" to ")[0].strip()
-                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                city = unit['current_city'].split("from ")[-1].split(" to ")[0].strip()
+                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
                                         return False, f"The PoI nearest stops in day {i+1} have hallucinated data."
                             else:
-                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
                                         return False, f"The PoI nearest stops in day {i+1} have hallucinated data."
                         if question['days']==7:
                             if ((i+1)==3) or ((i+1)==5):
-                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == org_city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
-                                    if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == dest_city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == org_city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                    if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == dest_city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
                                         return False, f"The PoI nearest stops in day {i+1} have hallucinated data."
                             elif ((i+1)==7):
-                                city = unit['current_city'].split("from")[-1].split(" to ")[0].strip()
-                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                city = unit['current_city'].split("from ")[-1].split(" to ")[0].strip()
+                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
                                         return False, f"The PoI nearest stops in day {i+1} have hallucinated data."
                             else:
-                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
+                                if len(pois[(pois['nearest_stop_name'].astype(str).str.contains(re.escape(transit_stop))) & (pois['PoI'] == poi_name) & (pois['City'] == city) & (abs(pois['nearest_stop_distance'] - stop_distance) <= 5)]) < 1:
                                         return False, f"The PoI nearest stops in day {i+1} have hallucinated data."
-                    except:
-                        return False, f"Incorrect format."
+                    except Exception as e:
+                        return False, f"Incorrect format. Error: {str(e)}"
     return True, None
-
 
 def is_valid_accommodaton(question, tested_data):
     data = []
