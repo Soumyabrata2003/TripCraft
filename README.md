@@ -28,6 +28,18 @@ This is the official implementation of **TripCraft**, a new benchmark for LLM dr
 
 We introduce TripCraft, a spatiotemporally coherent travel planning dataset that integrates real world constraints, including public transit schedules, event availability, diverse attraction categories, and user personas for enhanced personalization. To evaluate LLM generated plans beyond existing binary validation methods, we propose five continuous evaluation metrics, namely Temporal Meal Score, Temporal Attraction Score, Spatial Score, Ordering Score, and Persona Score which assess itinerary quality across multiple dimensions. 
 
+## 🔓 Dataset Access
+To get access to our dataset, please send a request to AcadGrants@service.microsoft.com and cc to *shreya[at]iitbbs.ac.in*, *abhikjana[at]iitbbs.ac.in*, *gmanish[at]microsoft.com* and *chaudhurisoumyabrata[at]gmail.com*.
+
+**Note:**
+```bash
+The requesting third party can:
+
+1. Download and use these deliverables for both research and commercial purposes,
+2. Modify them as desired, but include a citation to our work and include this README, and
+3. Use them internally only, without redistributing them to any other organization.
+```
+
 ## 🐍 Setup Environment
 Ensure that minconda/anaconda is installed in your system beforehand.
 1. Check whether conda is installed using:
