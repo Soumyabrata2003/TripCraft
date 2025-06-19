@@ -17,7 +17,7 @@ This is the official implementation of **TripCraft**, a new benchmark for LLM dr
 
 <p align="center">
 [<a href="https://arxiv.org/abs/2502.20508">Paper</a>] •
-[<a href="https://drive.google.com/file/d/17j7S4FGCRLfeOiye2CNR0ljUyvSLO49i/view?usp=sharing">TripCraft</a>] 
+[<a href="https://drive.google.com/file/d/1fGvXhiocLrcMPDbZfwOpECbJvf0sI6FB/view?usp=sharing">TripCraft</a>] 
 </p>
 
 ## 📢 News
