@@ -15,11 +15,6 @@
 This is the official implementation of **TripCraft**, a new benchmark for LLM driven personalized travel planning, offering a more realistic, constraint aware framework for itinerary generation.
 </div>
 
-<p align="center">
-[<a href="https://arxiv.org/abs/2502.20508">Paper</a>] •
-[<a href="https://drive.google.com/file/d/1fGvXhiocLrcMPDbZfwOpECbJvf0sI6FB/view?usp=sharing">TripCraft</a>] 
-</p>
-
 ## 📢 News
 
 - 2025/05/16: 🎉 Our **TripCraft** has been accepted to the Main Track of **ACL 2025**.
@@ -29,7 +24,7 @@ This is the official implementation of **TripCraft**, a new benchmark for LLM dr
 We introduce TripCraft, a spatiotemporally coherent travel planning dataset that integrates real world constraints, including public transit schedules, event availability, diverse attraction categories, and user personas for enhanced personalization. To evaluate LLM generated plans beyond existing binary validation methods, we propose five continuous evaluation metrics, namely Temporal Meal Score, Temporal Attraction Score, Spatial Score, Ordering Score, and Persona Score which assess itinerary quality across multiple dimensions. 
 
 ## 🔓 Dataset Access
-To get access to our dataset, please send a request to AcadGrants@service.microsoft.com and cc to *shreya[at]iitbbs.ac.in*, *abhikjana[at]iitbbs.ac.in*, *gmanish[at]microsoft.com* and *chaudhurisoumyabrata[at]gmail.com*.
+To get access to our dataset and auxiliary databases, please send a request to AcadGrants@service.microsoft.com and cc to *shreya[at]iitbbs.ac.in*, *abhikjana[at]iitbbs.ac.in*, *gmanish[at]microsoft.com* and *chaudhurisoumyabrata[at]gmail.com*.
 
 **Note:**
 ```bash
@@ -52,7 +47,7 @@ conda env create -f tpct_env.yml -n tripcraft
 conda activate
 ```
 
-2. Download the [database](https://drive.google.com/file/d/1a5dmmYhIhXHqFtd9jLZUyo7BS7FFVyRh/view?usp=sharing) and unzip it to the `TripCraft` directory (i.e., `your/path/to/TripCraft`).
+2. Download the database folder and unzip it to the `TripCraft` directory (i.e., `your/path/to/TripCraft`).
 
 ## 🚀 Running
 TripCraft offers experimentation in two settings: w/o parameter information and with parameter information mode. Change the run.sh file accordingly for both the settings.
