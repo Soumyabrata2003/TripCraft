@@ -54,18 +54,16 @@ if __name__ == "__main__":
     data = load_csv_data(args.csv_file)
 
     # Ensure 'query', 'reference_information' columns exist
-    if 'query' not in data.columns or 'reference_information' not in data.columns:
-        print("Error: CSV file must contain 'query' and 'reference_information' columns")
-        sys.exit(1)
-
+    
     # Prepare the dataset
     query_data_list = data.to_dict(orient='records')
 
     # Define planner based on strategy
     if args.strategy == 'direct_og':
         planner = Planner(model_name=args.model_name, agent_prompt=planner_agent_prompt_direct_og)
-    else args.strategy == 'direct_param':
-        planner = Planner(model_name=args.model_name, agent_prompt=cot_planner_agent_prompt_param)
+    else:
+        if args.strategy == 'direct_param':
+            planner = Planner(model_name=args.model_name, agent_prompt=cot_planner_agent_prompt_param)
 
     # Iterate over data and generate results
     with get_openai_callback() as cb:
