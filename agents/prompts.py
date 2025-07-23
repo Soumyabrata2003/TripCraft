@@ -115,10 +115,10 @@ planner_agent_prompt_direct_og = PromptTemplate(
                         template = PLANNER_INSTRUCTION_OG,
                         )
 
-# planner_agent_prompt_direct_param = PromptTemplate(
-#                         input_variables=["text","query","persona"],
-#                         template = PLANNER_INSTRUCTION_PARAMETER_INFO,
-#                         )
+planner_agent_prompt_direct_param = PromptTemplate(
+                        input_variables=["text","query","persona"],
+                        template = PLANNER_INSTRUCTION_PARAMETER_INFO,
+                        )
 
 # cot_planner_agent_prompt = PromptTemplate(
 #                         input_variables=["text","query"],
