@@ -1,15 +1,8 @@
 <div align="center">
 <h1 align="center">🧙‍♀️TripCraft🌍: A Benchmark for Spatio-Temporally Fine Grained Travel Planning【ACL'25 (Main)】</h1>
 
-<p align="center">
-   <a href="https://aclanthology.org/2025.acl-long.834">
-    <img src="https://img.shields.io/badge/ACL%202025-Main%20Conference-blue.svg?logo=acl" alt="ACL 2025">
-  </a>
-  <a href="https://arxiv.org/abs/2502.20508">
-    <img src="https://img.shields.io/badge/arXiv-2502.20508-b31b1b.svg?logo=arxiv" alt="arXiv">
-  </a>
-</p>
-
+[![ACL 2025](https://img.shields.io/badge/ACL-2025-blue.svg)](https://aclanthology.org/2025.acl-long.834)
+[![arXiv](https://img.shields.io/badge/arXiv-2502.20508-b31b1b.svg?logo=arxiv)](https://arxiv.org/abs/2502.20508)
 
 
 <p align="center">
