@@ -97,6 +97,12 @@ If you use our code in your research or wish to refer to our research paper, ple
 
 This repository is partially built based on [TravelPlanner](https://github.com/OSU-NLP-Group/TravelPlanner?tab=readme-ov-file). Sincere thanks to their wonderful work.
 
+Additionally, the annotation of the dataset would not be possible without the collective effort of the following people (in alphabetical order):
+
+```
+Ananya Dash, Aniket Rouniyar, Anindya Kartik, Anurag Sahu, Aryaneel Bhaduri, Avinaba Chakraborty, B K Bandana, Biswadeep Chakraborty, Biswajit Polai, Borru Vijay Sai, C Dattasai Aditya Amman, D. Youktasri, Debansi Patnaik, Deepon Halder, Devang Bordoloi, Etcharla Revanth Rao, Gaurav Kumar Jha, Gyanaditya Pattanaik, Harshit Goel, Hiraish Kumar, Jaya Sahithya Vege, Joy Mukhopadhyay, Kavya Dixit, Kommuru Jayasurya, Kunal Nandeshwar, M. Kalyan Ram, Madhav Ramanathan, Mansi Mehta, Meena Kalyani, N M Amlan, Omprakash Rout, P Jayanth Vinay, Piyush Kumar Gupta, Priyambada Acharya, Pujarani Guru, Riddhi Mandal, Rohith Marpina, Rohan Karn, Sadiq Khan, Sagar Bisht, Saumay Tyagi, Sayoni Chakraborty, Snehanshu Pal, Snehal Tripathy, Soham Roy, Soumalya Banik, Soumya Ranjan Nayak, Sourabh Patil, Vaishnavi Kanukuntla, Vishal Raj, Vytla Rakesh Mohan
+```
+
 
 ## 👫 Contact
 For any question, please file an issue.
