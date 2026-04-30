@@ -14,6 +14,7 @@ This is the official implementation of **TripCraft**, a new benchmark for LLM dr
 
 ## 📢 News
 
+- 2026/04/15: 🔥 [TripTide](https://arxiv.org/abs/2510.21329) (follow-up work) accepted to **ACL 2026 (Findings)**. 
 - 2025/05/16: 🎉 Our **TripCraft** has been accepted to the Main Track of **ACL 2025**.
 
 # 🧭 TripCraft Overview
@@ -89,9 +90,18 @@ If you use our code in your research or wish to refer to our research paper, ple
   author={Chaudhuri, Soumyabrata and Purkar, Pranav and Raghav, Ritwik and Mallick, Shubhojit and Gupta, Manish and Jana, Abhik and Ghosh, Shreya},
   journal={arXiv preprint arXiv:2502.20508},
   year={2025}
+}
 ```
+We also encourage you to check out our follow-up work and cite the following entry if you find it useful:
 
-
+```bibtex
+@article{karmakar2025triptide,
+  title={TripTide: A Benchmark for Adaptive Travel Planning under Disruptions},
+  author={Karmakar, Priyanshu and Chaudhuri, Soumyabrata and Mallick, Shubhojit and Gupta, Manish and Jana, Abhik and Ghosh, Shreya},
+  journal={arXiv preprint arXiv:2510.21329},
+  year={2025}
+}
+```
 <a name="acknowledgment"></a>
 ## 🎗️ Acknowledgement
 
